@@ -1,0 +1,14 @@
+* colocar na aws
+* limpar o codigo (precisa muito)
+* comentar
+* melhorar as rotinas e unificar idioma (em ingles)
+* documentação
+* implementar lista de pesquisas
+* implementar salvar em csv,excel e somente mostrar na api
+* implementar uma pasta para criação do banco como foi feita nos outros arquivos
+
+Front
+* pagina de login fixa
+* pagina de pesquisas salvas/historico
+* pagina com arquivos salvos com download
+* deixar menos feio hehe
