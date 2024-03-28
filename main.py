@@ -8,8 +8,8 @@ DEEP = 25 #vezes em que ele da pagedown na pagina, basicamente o quanto ele proc
 RAIO = 15   #raio de pesquisa
 NUMTHREADS = 4
 NAO_MOSTRAR_BROWSER = True
-MINIMO_REGISTROS = 35
-MAXIMO_TENTATIVAS_DEEP=200
+MINIMO_REGISTROS = 1
+MAXIMO_TENTATIVAS_DEEP = 2
 
 def process_municipio(lista, pesquisa, municipio, semaphore, counter_lock, counter, lista_municipios):
     print(municipio)
@@ -24,11 +24,10 @@ def process_municipio(lista, pesquisa, municipio, semaphore, counter_lock, count
             print(f"Pesquisas concluídas: {counter[0]} de {len(lista_municipios)}")
 
 
-def main():
-    
+def data_return(pesquisa="padarias+perto+de",raio=RAIO, cidade="Piracicaba"):
     json_gigante = unificar_arquivos()
     pesquisa = "padarias+perto+de"
-    lista_municipios = retorna_lista_municios_raio(json_busca("Piracicaba", json_gigante), json_gigante, RAIO)
+    lista_municipios = retorna_lista_municios_raio(json_busca(cidade, json_gigante), json_gigante, raio)
     lista = {'timeOfSearch': 0}
     start_time = time.time()
 
@@ -46,10 +45,8 @@ def main():
         thread.join()
 
     lista['timeOfSearch'] = str(time.time() - start_time)
-    for i in lista:
-      print(len(lista[i]))
-      print(lista[i])
+    return lista
 
 
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+#    main()
