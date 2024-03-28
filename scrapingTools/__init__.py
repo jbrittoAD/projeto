@@ -13,7 +13,7 @@ import time
 def salva_em_csv(data, nome):
     # Extrair chaves dos dicionários
     cabecalho = ['label', 'link', 'phone_number', 'tipo_de_negocio', 'endereço']
-    with open(nome+'.csv', 'w', newline='') as csvfile:
+    with open('files/'+nome+'.csv', 'w', newline='') as csvfile:
         escritor = csv.writer(csvfile, delimiter=',')
 
         # Escreva o cabeçalho
@@ -43,7 +43,7 @@ def salva_em_excel(data, nome):
             ws.cell(row=i, column=j+1, value=item[chave])
 
     # Salvar a pasta de trabalho
-    wb.save(nome+'.xlsx')
+    wb.save('files/'+nome+'.xlsx')
 
 
 def devolve_links(html):
