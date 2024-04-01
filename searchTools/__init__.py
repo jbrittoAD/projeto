@@ -56,7 +56,7 @@ def unificar_arquivos():
                 'lat':float(data['extra_latitude']),
                 'lon':float(data['extra_longitude'])}
         else:
-            print('json existe, verificar ',data['dict_id'])
+            pass#print('json existe, verificar ',data['dict_id'])
     return json_gigante
 
 

@@ -24,11 +24,42 @@ def salva_em_csv(data, nome):
             escritor.writerow([item[chave] for chave in cabecalho])
     return
 
-
 def salva_em_excel(data, nome):
     # Extrair chaves dos dicionários
-    cabecalho = ['label', 'link', 'phone_number', 'tipo_de_negocio', 'endereço']
+    cabecalho = ['municipio', 'label', 'phone_number', 'tipo_de_negocio', 'endereço', 'link']
+    
+    # Criar pasta de trabalho e planilha
+    wb = openpyxl.Workbook()
+    ws = wb.active
 
+    # Escrever o cabeçalho
+    for i, coluna in enumerate(cabecalho, start=1):
+        ws.cell(row=1, column=i, value=coluna)
+
+    # Inicializar a variável para rastrear a linha atual na planilha
+    linha_atual = 2
+
+    # Iterar sobre os dados e escrever na planilha
+    for municipio, info in data.items():
+        if municipio != "timeOfSearch":
+            for item in info['data']:
+                ws.cell(row=linha_atual, column=1, value=municipio)  # Escrever o município
+                for col, chave in enumerate(cabecalho[1:], start=2):
+                    try:
+                        valor = item.get(chave, "Não informado")
+                        ws.cell(row=linha_atual, column=col, value=valor)
+                    except Exception as e:
+                        print(f"Erro ao escrever dados: {e}")
+                linha_atual += 1  # Avançar para a próxima linha
+
+    # Salvar a pasta de trabalho
+    wb.save('files/' + nome + '.xlsx')
+
+
+def salva_em_excel_v_0(data, nome):
+
+    # Extrair chaves dos dicionários
+    cabecalho = ['municipio','label', 'phone_number', 'tipo_de_negocio', 'endereço', 'link']
     # Criar pasta de trabalho e planilha
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -36,11 +67,28 @@ def salva_em_excel(data, nome):
     # Escrever o cabeçalho
     for i, coluna in enumerate(cabecalho):
         ws.cell(row=1, column=i+1, value=coluna)
-
-    # Escrever os dados
-    for i, item in enumerate(data, start=2):
-        for j, chave in enumerate(cabecalho):
-            ws.cell(row=i, column=j+1, value=item[chave])
+    for ii in data:
+        if ii != "timeOfSearch":
+            municipio = ii
+             # Escrever os dados
+            try:
+                for i, item in enumerate(data[ii]['data'], start=2):
+                    #print(item)
+                    for j, chave in enumerate(cabecalho):
+                        if chave == 'municipio':
+                            ws.cell(row=i, column=j+1, value=municipio)
+                        else:
+                            try:
+                                if item[chave]!= None:
+                                    valor = item[chave]
+                                else:
+                                    valor = "Não informado"
+                                ws.cell(row=i, column=j+1, value=item[chave])
+                            except:
+                                ws.cell(row=i, column=j+1, value="None")
+            except:
+                pass
+   
 
     # Salvar a pasta de trabalho
     wb.save('files/'+nome+'.xlsx')
@@ -56,7 +104,7 @@ def devolve_links(html):
 
     lista=[]
     if elementos_a:
-        print('elementos_a ',len(elementos_a))
+        #print('elementos_a ',len(elementos_a))
         for elemento_a in elementos_a:
             infos={}
             label_link = elemento_a.find('a', class_='hfpxzc')
@@ -80,7 +128,7 @@ def devolve_links(html):
 
 
 def scrool_infinito(driver,deep,min_list_elements, max_repetition,atual=0,lista=[]):
-    print(deep,min_list_elements, max_repetition,atual,len(lista))
+    #print(deep,min_list_elements, max_repetition,atual,len(lista))
     element = driver.find_elements(By.CLASS_NAME, 'm6QErb') #scrool
     for nn,i in enumerate(element):
         try:
@@ -102,7 +150,7 @@ def scrool_infinito(driver,deep,min_list_elements, max_repetition,atual=0,lista=
 
 def pesquisa_inicial(pesquisa, deep, silent=True,num_min_registros=20,max_try=200):
     # Criar um objeto do webdriver
-    print(pesquisa)
+    #print(pesquisa)
     chrome_options = Options()
     if silent:
         chrome_options.add_argument("--headless")
